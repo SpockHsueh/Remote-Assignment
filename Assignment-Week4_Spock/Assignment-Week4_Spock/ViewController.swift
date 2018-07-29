@@ -37,11 +37,11 @@ class ViewController: UIViewController {
     }()
     
     
-    let client = WeatherAPIClient(configuration: .default)
+    let client = StationAPIClient(configuration: .default)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        getCurrentWeather()
+        getStationData()
     }
     
     
@@ -77,16 +77,21 @@ class ViewController: UIViewController {
             ])
     }
     
+    func displayStation(using viewModel: StationViewModel) {
+        self.stationIDLabel.text = viewModel.StationID
+        self.stationNameLabel.text = viewModel.EnName
+        self.addressLabel.text = viewModel.StationAddress
+        print(viewModel)
+    }
     
-    func getCurrentWeather() {
-        client.getCurrentWeather { (weather, error) in
-            if let weather = weather {
-                self.stationIDLabel.text = weather.StationID
-                self.stationNameLabel.text = weather.StationName.En
-                self.addressLabel.text = weather.StationAddress
+    
+    func getStationData() {
+        client.getCurrentStation{ (station, error) in
+            if let station = station {
+                let viewModel = StationViewModel(model: station)
+                self.displayStation(using: viewModel)
             }
         }
     }
-
 }
 

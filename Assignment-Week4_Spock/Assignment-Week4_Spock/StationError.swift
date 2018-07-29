@@ -1,5 +1,5 @@
 //
-//  WeatherError.swift
+//  StationError.swift
 //  Assignment-Week4_Spock
 //
 //  Created by Spoke on 2018/7/28.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum WeatherError: Error {
+enum StationError: Error {
     case requestFailed
     case resonseUnsuccessful(statusCode: Int)
     case invaliData

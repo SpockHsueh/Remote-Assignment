@@ -1,5 +1,5 @@
 //
-//  WeatherAPIClient.swift
+//  StationAPIClient.swift
 //  Assignment-Week4_Spock
 //
 //  Created by Spoke on 2018/7/28.
@@ -8,9 +8,7 @@
 
 import Foundation
 
-class WeatherAPIClient {
-    
-    
+class StationAPIClient {
     
     let url:URL = URL(string: "https://stations-98a59.firebaseio.com/.json")!
     
@@ -22,16 +20,16 @@ class WeatherAPIClient {
     }
     
     
-    typealias WeatherCompletionHandler = (Weather?, Error?) -> Void
-    typealias CurrentWeatherCompletionHandler = (CurrentWeather?, Error?) -> Void
+    typealias StationCompletionHandler = (Station?, Error?) -> Void
+//    typealias CurrentStationCompletionHandler = (StationDetail?, Error?) -> Void // 用一層closure就好？
     
     
     // 拿到當前天氣的JSON實體 OR 錯誤
-    private func getWeather(completionHandler completion: @escaping WeatherCompletionHandler) {
+    private func getStation(completionHandler completion: @escaping StationCompletionHandler) {
         
         // 確認網址是否正確
 //        guard let url = URL(string: url, relativeTo: nil) else {
-//            completion(nil, WeatherError.invalidUrl)
+//            completion(nil, StationError.)
 //            return
 //        }
         
@@ -41,20 +39,20 @@ class WeatherAPIClient {
             DispatchQueue.main.async {
                 if let data = data {
                     guard let httpResponse = response as? HTTPURLResponse else {
-                        completion(nil, WeatherError.requestFailed)
+                        completion(nil, StationError.requestFailed)
                         return
                     }
                     
                     if httpResponse.statusCode == 200 {
                         do {
-                            let weather = try self.decoder.decode(Weather.self, from: data)
-                            completion(weather, nil)
+                            let station = try self.decoder.decode(Station.self, from: data)
+                            completion(station, nil)
                         } catch let error {
                             completion(nil, error)
                         }
                         
                     } else {
-                        completion(nil, WeatherError.invaliData)
+                        completion(nil, StationError.invaliData)
                     }
                 } else if let error = error {
                     completion(nil, error)
@@ -65,11 +63,10 @@ class WeatherAPIClient {
         task.resume()
     }
     
-    // 呼叫getWeather函數用(因為他是private)
-    func getCurrentWeather(completionHandler completion: @escaping WeatherCompletionHandler) {
-        getWeather { (weather, error) in
-            completion(weather, error)
+    // 呼叫getCurrentStation函數用(因為他是private)
+    func getCurrentStation(completionHandler completion: @escaping StationCompletionHandler) {
+        getStation { (station, error) in
+            completion(station, error)
         }
     }
-    
 }
